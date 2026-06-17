@@ -1,14 +1,13 @@
-import { Button } from '@/components/ui/button'
+import { RouterProvider } from 'react-router-dom'
+
+import { router } from './routes'
 
 import './index.css'
 
 function App() {
   return (
     <>
-      <h1 className="text-center">Hello world</h1>
-      <Button size="lg" variant={'outline'}>
-        Hello world
-      </Button>
+      <RouterProvider router={router} />
     </>
   )
 }
