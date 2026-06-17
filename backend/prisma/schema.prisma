@@ -1,0 +1,255 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum ApplicationStage {
+  WISHLIST
+  SAVED
+  APPLIED
+  HR_SCREENING
+  TECHNICAL_ROUND
+  ASSIGNMENT
+  MANAGER_ROUND
+  FINAL_ROUND
+  OFFER
+  ACCEPTED
+  REJECTED
+  WITHDRAWN
+}
+
+enum TaskPriority {
+  LOW
+  MEDIUM
+  HIGH
+}
+
+enum GoalPeriod {
+  WEEKLY
+  MONTHLY
+}
+
+enum DocumentType {
+  RESUME
+  COVER_LETTER
+  PORTFOLIO
+  OTHER
+}
+
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  password     String
+  firstName    String
+  lastName     String
+  avatarUrl    String?
+  bio          String?
+  phone        String?
+  location     String?
+  linkedinUrl  String?
+  portfolioUrl String?
+  isVerified   Boolean  @default(false)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  applications  Application[]
+  companies     Company[]
+  contacts      Contact[]
+  tasks         Task[]
+  notes         Note[]
+  documents     Document[]
+  goals         Goal[]
+  notifications Notification[]
+  activityLogs  ActivityLog[]
+  refreshTokens RefreshToken[]
+
+  @@map("users")
+}
+
+model RefreshToken {
+  id        String   @id @default(cuid())
+  token     String   @unique
+  userId    String
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("refresh_tokens")
+}
+
+model Company {
+  id       String   @id @default(cuid())
+  name     String
+  website  String?
+  logoUrl  String?
+  location String?
+  industry String?
+  userId   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  applications Application[]
+  contacts     Contact[]
+
+  @@unique([userId, name])
+  @@map("companies")
+}
+
+model Application {
+  id          String           @id @default(cuid())
+  jobTitle    String
+  jobUrl      String?
+  stage       ApplicationStage @default(WISHLIST)
+  salaryMin   Int?
+  salaryMax   Int?
+  currency    String           @default("USD")
+  location    String?
+  isRemote    Boolean          @default(false)
+  description String?
+  source      String?
+  appliedAt   DateTime?
+  userId      String
+  companyId   String
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+
+  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  company      Company       @relation(fields: [companyId], references: [id])
+  interviews   Interview[]
+  tasks        Task[]
+  notes        Note[]
+  documents    Document[]
+  activityLogs ActivityLog[]
+
+  @@map("applications")
+}
+
+model Interview {
+  id            String    @id @default(cuid())
+  type          String
+  scheduledAt   DateTime
+  duration      Int?
+  location      String?
+  notes         String?
+  result        String?
+  applicationId String
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  application Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+
+  @@map("interviews")
+}
+
+model Task {
+  id            String       @id @default(cuid())
+  title         String
+  description   String?
+  dueDate       DateTime?
+  isCompleted   Boolean      @default(false)
+  priority      TaskPriority @default(MEDIUM)
+  userId        String
+  applicationId String?
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+
+  user        User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  application Application? @relation(fields: [applicationId], references: [id], onDelete: SetNull)
+
+  @@map("tasks")
+}
+
+model Contact {
+  id          String   @id @default(cuid())
+  name        String
+  role        String?
+  email       String?
+  phone       String?
+  linkedinUrl String?
+  userId      String
+  companyId   String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  user    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  company Company? @relation(fields: [companyId], references: [id], onDelete: SetNull)
+  notes   Note[]
+
+  @@map("contacts")
+}
+
+model Note {
+  id            String   @id @default(cuid())
+  content       String
+  userId        String
+  applicationId String?
+  contactId     String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  user        User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  application Application? @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  contact     Contact?     @relation(fields: [contactId], references: [id], onDelete: SetNull)
+
+  @@map("notes")
+}
+
+model Document {
+  id            String       @id @default(cuid())
+  name          String
+  type          DocumentType @default(OTHER)
+  url           String
+  userId        String
+  applicationId String?
+  createdAt     DateTime     @default(now())
+
+  user        User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  application Application? @relation(fields: [applicationId], references: [id], onDelete: SetNull)
+
+  @@map("documents")
+}
+
+model Goal {
+  id        String     @id @default(cuid())
+  title     String
+  target    Int
+  period    GoalPeriod @default(WEEKLY)
+  userId    String
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("goals")
+}
+
+model Notification {
+  id        String   @id @default(cuid())
+  message   String
+  isRead    Boolean  @default(false)
+  link      String?
+  userId    String
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("notifications")
+}
+
+model ActivityLog {
+  id            String   @id @default(cuid())
+  action        String
+  userId        String
+  applicationId String?
+  createdAt     DateTime @default(now())
+
+  user        User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  application Application? @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+
+  @@map("activity_logs")
+}
