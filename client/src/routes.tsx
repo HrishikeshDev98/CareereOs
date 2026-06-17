@@ -5,6 +5,8 @@ import NotFoundPage from './components/error/NotFoundPage'
 import AuthLayout from './components/layouts/AuthLayout'
 import DashboardLayout from './components/layouts/DashboardLayout'
 import ProtectedRoute from './components/layouts/ProtectedRoute'
+import Login from './pages/auth/Login'
+import Register from './pages/auth/Register'
 
 import './index.css'
 
@@ -14,12 +16,12 @@ export const router = createBrowserRouter([
     errorElement: <ErrorPage />,
     children: [
       {
-        path: '',
-        element: <></>,
+        path: '/register',
+        element: <Register />,
       },
       {
-        path: '',
-        element: <p></p>,
+        path: '/login',
+        element: <Login />,
       },
     ],
   },
