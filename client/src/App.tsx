@@ -1,7 +1,7 @@
-import './App.css'
+import './index.css'
 
 function App() {
-  return <p>Hello world</p>
+  return <h1 className="text-center">Hello world</h1>
 }
 
 export default App
