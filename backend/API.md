@@ -232,3 +232,62 @@ Returns paginated list of all companies.
 
 ### DELETE `/applications/:id`
 **Response** `204`
+
+---
+
+## Dashboard `/api/dashboard` — Protected
+
+### GET `/dashboard`
+Returns a summary of the authenticated user's job search activity.
+
+**Response** `200`
+```json
+{
+  "totalApplications": 24,
+  "appliedThisWeek": 3,
+  "pendingTasks": 7,
+  "byStage": {
+    "WISHLIST": 4,
+    "SAVED": 2,
+    "APPLIED": 6,
+    "HR_SCREENING": 3,
+    "TECHNICAL_ROUND": 2,
+    "ASSIGNMENT": 1,
+    "MANAGER_ROUND": 1,
+    "FINAL_ROUND": 1,
+    "OFFER": 1,
+    "ACCEPTED": 1,
+    "REJECTED": 2,
+    "WITHDRAWN": 0
+  },
+  "upcomingInterviews": [
+    {
+      "id": "...",
+      "scheduledAt": "2026-06-20T10:00:00.000Z",
+      "type": "TECHNICAL",
+      "application": {
+        "jobTitle": "Senior Engineer",
+        "company": { "name": "Acme Inc" }
+      }
+    }
+  ],
+  "recentApplications": [
+    {
+      "id": "...",
+      "jobTitle": "Senior Engineer",
+      "stage": "APPLIED",
+      "updatedAt": "2026-06-18T00:00:00.000Z",
+      "company": { "name": "Acme Inc", "logoUrl": null }
+    }
+  ],
+  "recentActivity": [
+    {
+      "id": "...",
+      "action": "APPLICATION_CREATED",
+      "entity": "Application",
+      "entityId": "...",
+      "createdAt": "2026-06-18T00:00:00.000Z"
+    }
+  ]
+}
+```

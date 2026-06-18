@@ -15,7 +15,7 @@ export const sidebarItems = [
   {
     id: 'dashboard',
     label: 'Dashboard',
-    href: '/dashboard',
+    href: '/',
     icon: FiHome,
   },
   {
