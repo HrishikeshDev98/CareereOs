@@ -11,17 +11,18 @@ export class AppError extends Error {
 export const errorHandler = (err: Error, _req: Request, res: Response, _next: NextFunction): void => {
   if (err instanceof ZodError) {
     res.status(400).json({
+      status: "failure",
       message: "Validation error",
-      errors: err.flatten().fieldErrors,
+      data: err.flatten().fieldErrors,
     });
     return;
   }
 
   if (err instanceof AppError) {
-    res.status(err.statusCode).json({ message: err.message });
+    res.status(err.statusCode).json({ status: "failure", message: err.message, data: null });
     return;
   }
 
   console.error(err);
-  res.status(500).json({ message: "Internal server error" });
+  res.status(500).json({ status: "failure", message: "Internal server error", data: null });
 };

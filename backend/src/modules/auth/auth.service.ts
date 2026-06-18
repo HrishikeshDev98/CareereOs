@@ -16,15 +16,7 @@ export const register = async (input: RegisterInput) => {
     select: { id: true, email: true, firstName: true, lastName: true },
   });
 
-  const payload = { userId: user.id };
-  const accessToken = signAccessToken(payload);
-  const refreshToken = signRefreshToken(payload);
-
-  await prisma.refreshToken.create({
-    data: { token: refreshToken, userId: user.id, expiresAt: addDays(new Date(), 7) },
-  });
-
-  return { user, accessToken, refreshToken };
+  return { message: "Account created successfully", user };
 };
 
 export const login = async (input: LoginInput) => {

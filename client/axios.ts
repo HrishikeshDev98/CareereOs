@@ -13,10 +13,11 @@ const axiosInstance = (contentType = 'application/json', customHeaders = {}): Ax
   })
 
   const token = localStorage.getItem('user-info')
+  const { accessToken } = JSON.parse(token ?? '{}') || {}
 
   instance.interceptors.request.use((config: InternalAxiosRequestConfig) => {
     if (token) {
-      config.headers.Authorization = `Bearer ${token}`
+      config.headers.Authorization = `Bearer ${accessToken}`
     }
     return config
   })

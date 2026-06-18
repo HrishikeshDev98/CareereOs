@@ -1,6 +1,10 @@
-import { useMutation, type UseMutationResult } from '@tanstack/react-query'
+import { useNavigate } from 'react-router-dom'
 
-import axiosInstance from '../../../axios'
+import { useMutation, type UseMutationResult } from '@tanstack/react-query'
+import type { AxiosResponse } from 'axios'
+import { toast } from 'sonner'
+
+import api from '@/src/lib/api'
 
 interface RegisterPayload {
   email: string
@@ -12,6 +16,8 @@ interface RegisterPayload {
 interface RegisterResponse {
   message: string
   token: string
+  accessToken: string
+  refreshToken: string
 }
 
 interface UseRegisterReturn {
@@ -19,22 +25,33 @@ interface UseRegisterReturn {
 }
 
 export const useRegister = (): UseRegisterReturn => {
-  const registerUser = useMutation<RegisterResponse, Error, RegisterPayload>({
-    mutationFn: async ({ email, password, firstName, lastName }: RegisterPayload) => {
-      const httpClient = axiosInstance()
+  const navigate = useNavigate()
 
-      const { data } = await httpClient.post<RegisterResponse>('/auth/register', {
-        email,
-        password,
-        firstName,
-        lastName,
-      })
+  const registerUser = useMutation<RegisterResponse, Error, RegisterPayload>({
+    mutationFn: async (payload: RegisterPayload) => {
+      const { data }: AxiosResponse<RegisterResponse> = await api.post<RegisterResponse>(
+        '/auth/register',
+        payload
+      )
+
+      localStorage.setItem(
+        'user-info',
+        JSON.stringify({
+          accessToken: data.accessToken,
+          refreshToken: data.refreshToken,
+        })
+      )
+
+      if (data.accessToken) {
+        toast('User Registered Successfully !')
+        navigate('/login')
+      } else {
+        toast('User Registeration Failed !')
+      }
 
       return data
     },
   })
 
-  return {
-    registerUser,
-  }
+  return { registerUser }
 }

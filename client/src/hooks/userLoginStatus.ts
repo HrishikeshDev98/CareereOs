@@ -1,4 +1,5 @@
 export const userLoginStatus = () => {
-  const token = localStorage.getItem('login-ingo')
-  return !!token
+  const { accessToken, refreshToken } = JSON.parse(localStorage.getItem('tokens') || '')
+
+  return !accessToken || !refreshToken ? false : true
 }
