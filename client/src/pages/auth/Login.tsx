@@ -1,7 +1,11 @@
-import React from 'react'
+import { userLoginStatus } from '@/src/hooks/userLoginStatus'
 
 const Login = () => {
-  return <div>Login</div>
+  const token = userLoginStatus()
+
+  console.log({ token })
+
+  return <p>Hello</p>
 }
 
 export default Login

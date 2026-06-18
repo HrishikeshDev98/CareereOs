@@ -24,7 +24,19 @@ import dashboardRoutes from "./modules/dashboard/dashboard.routes";
 const app = express();
 
 app.use(helmet());
-app.use(cors({ origin: env.CLIENT_URL, credentials: true }));
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      const allowed = [env.CLIENT_URL, /^http:\/\/localhost:\d+$/]
+      if (!origin || allowed.some((o) => (typeof o === "string" ? o === origin : o.test(origin)))) {
+        callback(null, true)
+      } else {
+        callback(new Error("Not allowed by CORS"))
+      }
+    },
+    credentials: true,
+  })
+);
 app.use(morgan("dev"));
 app.use(express.json());
 

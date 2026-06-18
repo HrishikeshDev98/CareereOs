@@ -1,7 +1,11 @@
-import React from 'react'
+import { Navigate, Outlet } from 'react-router-dom'
+
+import { userLoginStatus } from '@/src/hooks/userLoginStatus'
 
 const AuthLayout = () => {
-  return <div>AuthLayout</div>
+  const token = userLoginStatus()
+
+  return token ? <Navigate to="/" /> : <Outlet />
 }
 
 export default AuthLayout
