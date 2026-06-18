@@ -1,18 +1,4 @@
-import { FaRegBuilding } from 'react-icons/fa'
-import {
-  FiBriefcase,
-  FiCalendar,
-  FiCheckSquare,
-  FiColumns,
-  FiEdit3,
-  FiFileText,
-  FiHome,
-  FiLogOut,
-  FiSettings,
-  FiTarget,
-  FiUser,
-  FiUsers,
-} from 'react-icons/fi'
+import { FiLogOut, FiSettings, FiUser } from 'react-icons/fi'
 import { Link } from 'react-router-dom'
 
 import {
@@ -24,69 +10,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from '@/components/ui/sidebar'
-
-export const sidebarItems = [
-  {
-    id: 'dashboard',
-    label: 'Dashboard',
-    href: '/dashboard',
-    icon: FiHome,
-  },
-  {
-    id: 'applications',
-    label: 'Applications',
-    href: '/applications',
-    icon: FiBriefcase,
-  },
-  {
-    id: 'pipeline',
-    label: 'Pipeline (Kanban)',
-    href: '/pipeline',
-    icon: FiColumns,
-  },
-  {
-    id: 'calendar',
-    label: 'Calendar',
-    href: '/calendar',
-    icon: FiCalendar,
-  },
-  {
-    id: 'tasks',
-    label: 'Tasks',
-    href: '/tasks',
-    icon: FiCheckSquare,
-  },
-  {
-    id: 'goals',
-    label: 'Goals',
-    href: '/goals',
-    icon: FiTarget,
-  },
-  {
-    id: 'notes',
-    label: 'Notes',
-    href: '/notes',
-    icon: FiEdit3,
-  },
-  {
-    id: 'documents',
-    label: 'Documents',
-    href: '/documents',
-    icon: FiFileText,
-  },
-  {
-    id: 'contacts',
-    label: 'Contacts',
-    href: '/contacts',
-    icon: FiUsers,
-  },
-  {
-    id: 'companies',
-    label: 'Companies',
-    href: '/companies',
-    icon: FaRegBuilding,
-  },
-]
+import { sidebarItems } from '@/src/constants/sidebar'
 
 export function AppSidebar() {
   return (
