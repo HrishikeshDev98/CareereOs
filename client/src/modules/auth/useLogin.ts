@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { useMutation, type UseMutationResult } from '@tanstack/react-query'
 import { toast } from 'sonner'
 
-import api from '@/src/lib/api'
+import api from '@/lib/api'
 
 interface LoginPayload {
   email: string
@@ -44,7 +44,6 @@ export const useLogin = (): UseLoginReturn => {
   const loginUser = useMutation<LoginResponse, Error, LoginPayload>({
     mutationFn: async (payload: LoginPayload) => {
       const { data } = await api.post<LoginResponse>('/auth/login', payload)
-      console.log(data?.data)
 
       const accessToken = data.data?.accessToken
       const refreshToken = data.data?.refreshToken
@@ -52,20 +51,8 @@ export const useLogin = (): UseLoginReturn => {
       if (!accessToken || !refreshToken) {
         toast('Login failed , Please try again')
       } else {
-        console.log('Else')
-        localStorage.setItem(
-          'user-info',
-          JSON.stringify({
-            'user-info': data.data.user,
-          })
-        )
-        localStorage.setItem(
-          'tokens',
-          JSON.stringify({
-            accessToken,
-            refreshToken,
-          })
-        )
+        localStorage.setItem('user-info', JSON.stringify(data.data.user))
+        localStorage.setItem('tokens', JSON.stringify({ accessToken, refreshToken }))
         navigate('/')
       }
 

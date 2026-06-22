@@ -1,3 +1,5 @@
-import axiosInstance from '@/axios'
+import axiosClient from '@/lib/axiosClient'
 
-export const api = axiosInstance()
+const api = axiosClient()
+
+export default api

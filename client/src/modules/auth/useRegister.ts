@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { useMutation, type UseMutationResult } from '@tanstack/react-query'
 import { toast } from 'sonner'
 
-import api from '@/src/lib/api'
+import api from '@/lib/api'
 
 interface RegisterPayload {
   email: string
@@ -12,11 +12,20 @@ interface RegisterPayload {
   lastName: string
 }
 
+interface RegisteredUser {
+  id: string
+  email: string
+  firstName: string
+  lastName: string
+}
+
 interface RegisterResponse {
+  status: string
   message: string
-  token: string
-  accessToken: string
-  refreshToken: string
+  data: {
+    message: string
+    user: RegisteredUser
+  }
 }
 
 interface UseRegisterReturn {
@@ -30,19 +39,11 @@ export const useRegister = (): UseRegisterReturn => {
     mutationFn: async (payload: RegisterPayload) => {
       const { data } = await api.post<RegisterResponse>('/auth/register', payload)
 
-      localStorage.setItem(
-        'user-info',
-        JSON.stringify({
-          accessToken: data.accessToken,
-          refreshToken: data.refreshToken,
-        })
-      )
-
-      if (data.accessToken) {
+      if (data.data?.user) {
         toast('User Registered Successfully !')
         navigate('/login')
       } else {
-        toast('User Registeration Failed !')
+        toast('User Registration Failed !')
       }
 
       return data
