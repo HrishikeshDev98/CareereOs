@@ -1,7 +1,6 @@
 import { useNavigate } from 'react-router-dom'
 
 import { useMutation, type UseMutationResult } from '@tanstack/react-query'
-import type { AxiosResponse } from 'axios'
 import { toast } from 'sonner'
 
 import api from '@/src/lib/api'
@@ -44,10 +43,7 @@ export const useLogin = (): UseLoginReturn => {
 
   const loginUser = useMutation<LoginResponse, Error, LoginPayload>({
     mutationFn: async (payload: LoginPayload) => {
-      const { data }: AxiosResponse<LoginResponse> = await api.post<LoginResponse>(
-        '/auth/login',
-        payload
-      )
+      const { data } = await api.post<LoginResponse>('/auth/login', payload)
       console.log(data?.data)
 
       const accessToken = data.data?.accessToken

@@ -1,7 +1,6 @@
 import { useNavigate } from 'react-router-dom'
 
 import { useMutation, type UseMutationResult } from '@tanstack/react-query'
-import type { AxiosResponse } from 'axios'
 import { toast } from 'sonner'
 
 import api from '@/src/lib/api'
@@ -29,10 +28,7 @@ export const useRegister = (): UseRegisterReturn => {
 
   const registerUser = useMutation<RegisterResponse, Error, RegisterPayload>({
     mutationFn: async (payload: RegisterPayload) => {
-      const { data }: AxiosResponse<RegisterResponse> = await api.post<RegisterResponse>(
-        '/auth/register',
-        payload
-      )
+      const { data } = await api.post<RegisterResponse>('/auth/register', payload)
 
       localStorage.setItem(
         'user-info',
