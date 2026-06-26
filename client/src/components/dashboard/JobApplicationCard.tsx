@@ -15,8 +15,14 @@ export interface JobApplication {
   }
 }
 
-const JobApplicationCard = ({ application }: { application: JobApplication }) => {
-  const formattedDate = new Date(application.appliedAt).toLocaleDateString('en-US', {
+const JobApplicationCard = ({
+  application,
+  interviewDetails,
+}: {
+  application: JobApplication
+  interviewDetails: any
+}) => {
+  const formattedDate = new Date(interviewDetails?.scheduledAt).toLocaleDateString('en-US', {
     month: 'short',
     day: 'numeric',
     year: 'numeric',
@@ -24,9 +30,9 @@ const JobApplicationCard = ({ application }: { application: JobApplication }) =>
 
   const getStageStyles = (stage: string) => {
     switch (stage?.toUpperCase()) {
-      case 'OFFER':
+      case 'Technical':
         return 'bg-emerald-50 text-emerald-700 border-emerald-200'
-      case 'INTERVIEW':
+      case 'HR Screen':
         return 'bg-blue-50 text-blue-700 border-blue-200'
       case 'REJECTED':
         return 'bg-rose-50 text-rose-700 border-rose-200'
@@ -61,9 +67,9 @@ const JobApplicationCard = ({ application }: { application: JobApplication }) =>
 
         {/* Pure Tailwind Status Badge */}
         <span
-          className={`inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold uppercase tracking-wider ${getStageStyles(application?.stage)}`}
+          className={`inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold uppercase tracking-wider ${getStageStyles(interviewDetails?.type)}`}
         >
-          {application?.stage}
+          {interviewDetails?.type}
         </span>
       </div>
 
@@ -73,16 +79,16 @@ const JobApplicationCard = ({ application }: { application: JobApplication }) =>
       {/* Footer Content */}
       <div className="flex items-center justify-between text-xs text-gray-500">
         <div className="flex items-center gap-2">
-          <span>{application.isRemote ? 'Remote' : 'On-site'}</span>
-          {application.location && (
+          <span>{interviewDetails.location ? 'Remote' : 'On-site'}</span>
+          {interviewDetails.location && (
             <>
               <span className="h-1 w-1 rounded-full bg-gray-300" />
-              <span>{application.location}</span>
+              <span>{interviewDetails.location}</span>
             </>
           )}
         </div>
         <div>
-          <span>Applied {formattedDate}</span>
+          <span>Interview Scheduled on {formattedDate}</span>
         </div>
       </div>
     </div>

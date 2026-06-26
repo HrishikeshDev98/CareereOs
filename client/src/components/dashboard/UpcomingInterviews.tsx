@@ -12,7 +12,7 @@ const UpcomingInterviews = ({
       <h3>Uppoming interviews</h3>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {interviews?.map((int, index) => (
-          <JobApplicationCard key={index} application={int?.application} />
+          <JobApplicationCard key={index} interviewDetails={int} application={int?.application} />
         ))}
       </div>
     </>
