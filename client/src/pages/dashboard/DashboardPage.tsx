@@ -1,9 +1,15 @@
+import { toast } from 'sonner'
+
 import { Skeleton } from '@/components/ui/skeleton'
 import Dashboard from '@/src/components/Dashboard'
 import { useDashboard } from '@/src/modules/dashboard/useDashboard'
 
 const DashboardPage = () => {
-  const { data, pending } = useDashboard()
+  const { data, pending, error } = useDashboard()
+
+  if (error) {
+    toast('Error occured while fetching the data')
+  }
 
   if (pending) {
     return (
