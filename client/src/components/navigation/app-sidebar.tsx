@@ -1,5 +1,5 @@
 import { FiLogOut, FiSettings, FiUser } from 'react-icons/fi'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 import {
   Sidebar,
@@ -13,6 +13,12 @@ import {
 import { sidebarItems } from '@/src/constants/sidebar'
 
 export function AppSidebar() {
+  const navigate = useNavigate()
+
+  const handleLogout = () => {
+    localStorage.clear()
+    navigate('/login')
+  }
   return (
     <Sidebar>
       <SidebarHeader className="p-4">
@@ -63,7 +69,7 @@ export function AppSidebar() {
 
           <SidebarMenuItem>
             <SidebarMenuButton asChild>
-              <button className="flex w-full items-center gap-3">
+              <button onClick={handleLogout} className="flex w-full items-center gap-3">
                 <FiLogOut className="h-4 w-4 shrink-0" />
 
                 <span className="text-sm font-medium">Sign out</span>
