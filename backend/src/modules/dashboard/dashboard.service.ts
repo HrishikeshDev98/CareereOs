@@ -1,7 +1,8 @@
 import { prisma } from "../../lib/prisma";
 import { ApplicationStage } from "@prisma/client";
+import { DashboardSummary } from "./dashboard.types";
 
-export const getSummary = async (userId: string) => {
+export const getSummary = async (userId: string): Promise<DashboardSummary> => {
   const now = new Date();
   const weekStart = new Date(now);
   weekStart.setDate(now.getDate() - now.getDay() + (now.getDay() === 0 ? -6 : 1));
@@ -42,12 +43,14 @@ export const getSummary = async (userId: string) => {
     }),
   ]);
 
+  // Object.fromEntries widens keys to `string`; we provably build every
+  // enum key, so assert the precise Record type for the contract.
   const byStage = Object.fromEntries(
     Object.values(ApplicationStage).map((stage) => [
       stage,
       stageBreakdown.find((s) => s.stage === stage)?._count.id ?? 0,
     ])
-  );
+  ) as Record<ApplicationStage, number>;
 
   return {
     totalApplications,

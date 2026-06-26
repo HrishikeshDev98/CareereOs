@@ -11,7 +11,7 @@ import Register from './pages/auth/Register'
 import Calendar from './pages/calendar/Calendar'
 import Companies from './pages/companies/Companies'
 import Contacts from './pages/contacts/Contacts'
-import Dashboard from './pages/dashboard/Dashboard'
+import DashboardPage from './pages/dashboard/DashboardPage'
 import Documents from './pages/documents/Documents'
 import Goals from './pages/goals/Goals'
 import Notes from './pages/notes/Notes'
@@ -47,7 +47,7 @@ export const router = createBrowserRouter([
         children: [
           {
             index: true,
-            element: <Dashboard />,
+            element: <DashboardPage />,
           },
           {
             path: 'applications',
